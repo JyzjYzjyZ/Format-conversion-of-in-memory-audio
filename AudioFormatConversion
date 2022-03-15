@@ -1,0 +1,88 @@
+import soundfile,librosa,torch, copy
+import numpy,torchaudio,wave,torchvision #build时祈福求平安
+
+'''
+author:goodjin5
+date:2022.3.15
+-v 1.0
+=====================================
+简单的工具类，弥补了librosa载入速度极慢，soundfile不能转换raw,wave难以使用的问题
+使用场景 使用多个预训练模型时音频库不统一，实现了一次载入一直可用
+支持：以大约46s/130min 的速度加载音频重采样并转换成单声道
+input:audioPath  or  nparray:float64
+output:tensor:shape(1,x)or shape(x,1)
+    numpy：interesting6
+    wave二进制：int16
+=====================================
+A simple tool class to compensate for the extremely slow loading of librosa, the inability to convert soundfiles to raw, and the difficulty of using wave
+Usage scenarios Audio libraries are inconsistent when using multiple pre-trained models, making them always available on a single load
+Support: loading audio resamples and converting to mono at a speed of approximately 46s/130min
+input:audioPath or nparray:float64
+output:tensor:shape(1,x) or shape(x,1)
+    numpy:interest6
+    wave binary:int16
+'''
+
+
+
+
+def read(path:str,sr:int=16000,mono:bool=True):
+    '''
+    :param path: 音频路径
+    :param sr: 采样率
+    :param mono: 启用单声道
+    :return: numpy-float64
+    '''
+    target_sr=sr
+    sound,orig_sr = soundfile.read(path,dtype='float64')
+    sound=sound.T
+    # to mono,and resample sr
+    if mono:
+        sound = librosa.to_mono(sound)
+    sound = librosa.resample(y=sound,orig_sr=orig_sr,target_sr=target_sr,
+                             res_type=('kaiser_fast' if target_sr <= orig_sr else 'kaiser_best'))
+    return sound,target_sr
+
+
+def toWave(sound):
+    '''
+    :param sound: numpy-float64
+    :return: waveFile -bytes
+    '''
+    # 32767
+    return (sound * 32767).astype('int16').tobytes()
+
+
+def toTorch(sound):
+    '''
+    :param sound: numpy-float64
+    :return: tensor-float32
+    '''
+    sound = sound.astype('float32')
+    t = torch.from_numpy(copy.deepcopy(sound))
+    # 扩展维度，维度转换
+    return t.unsqueeze(1).permute(1, 0)
+
+
+def toNumpy_int16(sound):
+    return (sound * 32767).astype('int16')
+
+
+def torchToNumpy_float(sound):
+    '''
+    :param sound: tensor
+    :return: numpy_float float是16还是32由输入的tensor决定
+    '''
+    # 将所有shape为1的维度降维
+    return sound.squeeze().numpy()
+
+
+if __name__=='__main__':
+    # exaxmple
+    # You can test performance and usability here
+    # change 'AUDIO_PATH.wav'
+    numpy_float64,sr = read('AUDIO_PATH.wav',16000,True)
+    wave = toWave(numpy_float64)
+    tensor = toTorch(numpy_float64)
+    numpy_int16 = toNumpy_int16(numpy_float64)
+    print('Passing the test')
