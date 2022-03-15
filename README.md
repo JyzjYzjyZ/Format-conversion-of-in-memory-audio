@@ -4,11 +4,17 @@ A simple tool class to compensate for the extremely slow loading of librosa, the
 Audio object interconversion of librosa wave torchaudio soundfile
 ***
 Usage scenarios Audio libraries are inconsistent when using multiple pre-trained models, making them always available on a single load
+
 Support: loading audio resamples and converting to mono at a speed of approximately 46s/130min
+
 input:audioPath or nparray:float64
+
 output:tensor:shape(1,x) or shape(x,1)
-       numpy:interest6
-       wave binary:int16
+
+&emsp;&emsp;numpy:interest6
+       
+&emsp;&emsp;wave binary:int16
+
 
 ## install
 ```
