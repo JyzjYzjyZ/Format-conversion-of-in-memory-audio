@@ -9,9 +9,9 @@ Support: loading audio resamples and converting to mono at a speed of approximat
 
 input:audioPath or nparray:float64
 
-output:tensor:shape(1,x) or shape(x,1)
+output:tensor:shape(1,x)
 
-&emsp;&emsp;numpy:interest6
+&emsp;&emsp;numpy:interest6 [shap(x) or shape(x,1)]
        
 &emsp;&emsp;wave binary:int16
 
