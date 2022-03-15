@@ -1,5 +1,5 @@
 import soundfile,librosa,torch, copy
-import numpy,torchaudio,wave,torchvision #build时祈福求平安
+# import numpy,torchaudio,wave,torchvision #build时祈福求平安
 
 '''
 author:goodjin5
