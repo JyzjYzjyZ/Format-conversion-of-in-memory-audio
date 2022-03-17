@@ -15,7 +15,7 @@ output:tensor:shape(1,x)
        
 &emsp;&emsp;wave binary:int16
 
-
+![image](https://raw.githubusercontent.com/JyzjYzjyZ/Format-conversion-of-in-memory-audio/main/readme_ing/img_low_1.jpg)
 ## install
 ```
 python 3.8.12
